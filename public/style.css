@@ -18,6 +18,10 @@ body {
     font-weight:1000;
 }
 
+.m-tb-5{
+    margin: 50px 0;
+}
+
 body{
     color: black;
 }
@@ -140,13 +144,7 @@ input::placeholder{
     padding: 10px 20px;
 }
 
-
-
-.trending-container{
-    margin: 50px 0;
-}
-/* trending-header */
-.trending-header{
+.column-container-header{
     padding: 0 30px;
     align-items: center;
 }
@@ -165,6 +163,10 @@ input::placeholder{
     font-weight: 300;
 }
 
+.anchor :hover{
+    cursor: pointer;
+}
+
 .selected{
     background-color: #30E3CA;
     border-radius: 20px;
@@ -175,7 +177,8 @@ input::placeholder{
     color: black;
 }
 
-.trending-content{
+.column-content{
+    padding-left: 30px;
     margin-top: 40px;
     gap: 30px;
     overflow-x: scroll;
@@ -258,5 +261,71 @@ input::placeholder{
     .inner-content{
         margin: 0;
     }
+}
 
-  }
+@media screen and (max-width: 500px){
+
+    .navbar{
+        display: none;
+        overflow-x: hidden;
+    }
+
+    .title{
+        font-size: 18px ;
+    }
+
+    .media-container{
+        padding: 10px;
+    }
+
+    .media-discover{
+        padding: 10px;
+    }
+
+    input::placeholder{
+        font-size: 14px
+    }
+    
+    .search form input[type="text"]{
+        height: 30px;
+        padding: 3px 8px;
+        border-radius: 15px;
+    }
+
+    .search form button[type="submit"]{
+        height: 30px;
+        border-radius: 15px;
+        padding: 3px 5px;
+        font-size: 14px;
+    }
+
+    .column-container-header{
+        flex-direction: column;
+        gap: 10px;
+        align-content: flex-start;
+        align-items: flex-start;
+        padding: 20px;
+    }
+
+    .selector{
+        margin: 0;
+        font-size: 14px;
+    }
+
+    .column-content{
+        padding: 5px;
+        gap: 20px;
+    }
+
+    .footer-content{
+        flex-direction: column;
+        gap: 30px;
+        padding: 20px;
+    }
+
+    .flex{
+        flex-wrap: nowrap;
+    }
+
+    
+}

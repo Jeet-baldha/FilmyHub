@@ -1,0 +1,139 @@
+<%- include("navbar.ejs") %>
+
+    <script>
+
+    </script>
+
+    <section class="media-discover inner-content">
+
+        <div class="media-container" >
+
+            <div class="title">
+                <h1>Welcome</h1>
+                <h3>Millions of movies, TV shows and people to discover. Explore now.</h3>
+            </div>
+
+            <div class="search">
+                <form action="" id="search-form">
+                    <input type="text" name="search" placeholder="search for Movie, TV show and person...">
+                    <button type="submit">Search</button>
+                </form>
+            </div>
+        </div>
+    </section>
+
+
+    <section class="trending inner-content">
+
+        <div class="column-container m-tb-5">
+            <div class="column-container-header flex">
+                <h1>Trending</h1>
+                <div class="selector flex">
+                    <div class="anchor today selected">
+                        <a href="/">Today</a>
+                    </div>
+                    <div class="anchor week">
+                        <a href="/week">This week</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="column-content flex">
+
+                <% if (trendingMovieList) { %>
+                    <% for (const movie of trendingMovieList.results) { %>
+                        <div class="movie-card">
+                            <img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>"
+                                alt="<%= movie.title %> Poster">
+                            <div class="details">
+                                <div class="rating" style="font-size: 12px;">
+                                    <%= movie.vote_average.toFixed(2) %>
+                                </div>
+                                <h4 class="movie-name">
+                                    <%= movie.title %>
+                                </h4>
+                                <p class="movie-date" style="font-size: 12px;">
+                                    <%= movie.release_date %>
+                                </p>
+                            </div>
+                        </div>
+                        <% } %>
+                            <% } %>
+            </div>
+        </div>
+    </section>
+    <section class="popular inner-content">
+
+        <div class="column-container m-tb-5">
+            <div class="column-container-header flex">
+                <h1>What's Popular</h1>
+                <div class="selector flex">
+                    <div class="anchor today selected">
+                        <a href="#">Streming</a>
+                    </div>
+                    <div class="anchor week">
+                        <a href="#">On tv</a>
+                    </div>
+                    <div class="anchor week">
+                        <a href="#">For rent</a>
+                    </div>
+                    <div class="anchor week">
+                        <a href="#">On theaters</a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="popular column-content flex">
+
+                <% if (popularMovieList) { %>
+                    <% for (const movie of popularMovieList.results) { %>
+                        <div class="movie-card">
+                            <img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>"
+                                alt="<%= movie.title %> Poster">
+                            <div class="details">
+                                <div class="rating" style="font-size: 12px;">
+                                    <%= movie.vote_average.toFixed(2) %>
+                                </div>
+                                <h4 class="movie-name">
+                                    <%= movie.title %>
+                                </h4>
+                                <p class="movie-date" style="font-size: 12px;">
+                                    <%= movie.release_date %>
+                                </p>
+                            </div>
+                        </div>
+                        <% } %>
+                            <% } %>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        document.querySelector('.today').addEventListener('click', function () {
+            document.querySelector('.today').classList.add('selected');
+            document.querySelector('.week').classList.remove('selected');
+
+        })
+
+        document.querySelector('.week').addEventListener('click', function () {
+
+            // const BearerToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzAzMmU2YjA4NDMzNmRlMWQ1MTVhMmJhMTEyYmFkOCIsInN1YiI6IjY0ZDNlNDcwZGQ5MjZhMDFlOTg3YmQ1NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nf3OISp0W87cprwZXdkN-4hgY0-dHR7k4w6o_TokVbI";
+            // const config = {
+            //     headers: { Authorization: 'Bearer ' + BearerToken },
+            // }
+
+            // try {
+            //     var result = await axios.get(url + "trending/movie/week", config);
+            //     movieList = result.data;
+            // } catch (error) {
+            //     res.status(404).send(error.message);
+            // }
+
+            // document.querySelector('.week').classList.add('selected');
+            // document.querySelector('.today').classList.remove('selected');
+
+        })
+    </script>
+
+
+    <%- include("footer.ejs") %>
