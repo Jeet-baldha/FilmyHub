@@ -18,11 +18,13 @@ app.use(express.static("public"));
 app.get('/', async (req, res) =>{
     try {
         let trendingMovieList = await axios.get(url +"trending/movie/day",config);
-        let popularMovieList = await axios.get(url +"/movie/popular",config);
+        let popularMovieList = await axios.get(url +"movie/popular",config);
+        let latestMovieList = await axios.get(url +"discover/movie?sort_by=relase_date.asec",config);
         res.render('index',{
             trendingMovieList:trendingMovieList.data,
-            popularMovieList:popularMovieList.data
-        });
+            popularMovieList:popularMovieList.data,
+            latestMovieList:latestMovieList.data.results    
+        }); 
     } catch (error) {
         res.status(404).send(error.message);
     }
@@ -44,17 +46,6 @@ app.get('/week', async (req, res) =>{
     }
 
 });
-
-// async function updateTrend(day){
-//     try {
-//         var result = await axios.get(url +"trending/movie/"+day+"/",config);
-//         res.render('index',{
-//             movieList:result.data,
-//         });
-//     } catch (error) {
-//         res.status(404).send(error.message);
-//     }
-// }
 
 app.listen(port, (req, res) =>{
     console.log('listening on port '+port);
