@@ -17,13 +17,32 @@ app.use(express.static("public"));
 
 app.get('/', async (req, res) =>{
     try {
-        let trendingMovieList = await axios.get(url +"trending/movie/day",config);
+        let trendingMovieListDay = await axios.get(url +"trending/movie/day",config);
+        let trendingMovieListWeek = await axios.get(url +"trending/movie/week",config);
         let popularMovieList = await axios.get(url +"movie/popular",config);
-        let latestMovieList = await axios.get(url +"discover/movie?sort_by=relase_date.asec",config);
+        let resplonse = await axios.get('https://api.themoviedb.org/3/discover/movie?release_date.desc',config);
+        let latestMovieList =[];
+
+        for(let i = 0;i<20;i++){
+            let movie = resplonse.data.results[i];
+            movie = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/videos?language=en-US`,config);
+            movie = movie.data.results;
+            if(movie.length > 0){
+
+                for(let j = 0;j < movie.length;j++) {
+                    if(movie[j].type === 'Trailer'){
+                        latestMovieList.push(movie[j]); break
+                    }
+                };
+                
+            }
+        }
+
         res.render('index',{
-            trendingMovieList:trendingMovieList.data,
+            trendingMovieListDay:trendingMovieListDay.data,
+            trendingMovieListWeek:trendingMovieListWeek.data,
             popularMovieList:popularMovieList.data,
-            latestMovieList:latestMovieList.data.results    
+            latestMovieList:latestMovieList
         }); 
     } catch (error) {
         res.status(404).send(error.message);

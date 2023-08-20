@@ -1,6 +1,5 @@
 <%- include("navbar.ejs") %>
 
-  <script></script>
 
   <section class="media-discover inner-content">
     <div class="media-container">
@@ -22,19 +21,40 @@
     <div class="column-container m-tb-5">
       <div class="column-container-header flex">
         <h1>Trending</h1>
-        <div class="selector flex">
+        <div class="selector flex" >
           <div class="anchor today selected">
-            <a href="/">Today</a>
+            <a href="#" class="non-clickable">Today</a>
           </div>
           <div class="anchor week">
-            <a href="/week">This week</a>
+            <a href="#" class="non-clickable">This week</a>
           </div>
         </div>
       </div>
 
-      <div class="column-content flex">
-        <% if (trendingMovieList) { %>
-          <% for (const movie of trendingMovieList.results) { %>
+      <div class="column-content flex dayList">
+        <% if (trendingMovieListDay) { %>
+          <% for (const movie of trendingMovieListDay.results) { %>
+            <div class="movie-card">
+              <img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" />
+              <div class="details">
+                <div class="rating" style="font-size: 12px">
+                  <%= movie.vote_average.toFixed(2) %>
+                </div>
+                <h4 class="movie-name">
+                  <%= movie.title %>
+                </h4>
+                <p class="movie-date" style="font-size: 12px">
+                  <%= movie.release_date %>
+                </p>
+              </div>
+            </div>
+            <% } %>
+              <% } %>
+      </div>
+
+      <div class="column-content flex weekList">
+        <% if (trendingMovieListWeek) { %>
+          <% for (const movie of trendingMovieListWeek.results) { %>
             <div class="movie-card">
               <img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" />
               <div class="details">
@@ -61,51 +81,45 @@
 
       <div class="latest-trailer">
         <div class="column-container-header flex">
-          <h1>Latest Trailers</h1>
+          <h1 >Latest Trailers</h1>
           <div class="selector flex">
-            <div class="anchor today selected">
-              <a href="#">Streming</a>
+            <div class="anchor  selected">
+              <a href="#" class="non-clickable">Streming</a>
             </div>
-            <div class="anchor week">
-              <a href="#">On tv</a>
+            <div class="anchor ">
+              <a href="#" class="non-clickable">On tv</a>
             </div>
-            <div class="anchor week">
+            <div class="anchor ">
               <a href="#">For rent</a>
             </div>
-            <div class="anchor week">
-              <a href="#">On theaters</a>
+            <div class="anchor " >
+              <a href="#" class="non-clickable">On theaters</a>
             </div>
           </div>
         </div>
 
-        <div class="trailer-content flex">
-
-          <div class="vedio-details">
-
-            <% if(locals.latestMovieList) { %>
-
-              <% latestMovieList.forEach((movie, index) => { %>
-
-        
-
-                  
-
-                   
-                    <div class="trailer-details">
-                      <h4 class="movie-name">
-                        <%=movie.title%>
-                      </h4>
-                      <p class="movie-date" style="font-size: 12px">
-                        
-                      </p>
-                    </div>
-                    
-                      <% }); %>
-                        <% } %>
-          </div>
-
+        <div class="column-content flex">
+          <% if (latestMovieList) { %>
+            
+            <% for (const movie of latestMovieList) { %>
+              <div class="trailer-card">
+                <iframe width="300" height="169" style="border-radius: 8px;" src="https://www.youtube.com/embed/<%= movie.key %>" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen=""></iframe>
+                <div class="details">
+                  <div class="trailer-details">
+                    <h1><%= movie.name %></h1>
+                    <h4><%=movie.type%></h4>
+                  </div>
+                  <h4 class="movie-name">
+                    <%= movie.title %>
+                  </h4>
+                  <p class="movie-date" style="font-size: 12px">
+                    <%= movie.release_date %>
+                  </p>
+                </div>
+              </div>
+              <% } %>
+                <% } %>
         </div>
-
 
       </div>
 
@@ -118,16 +132,16 @@
       <div class="column-container-header flex">
         <h1>What's Popular</h1>
         <div class="selector flex">
-          <div class="anchor today selected">
+          <div class="anchor  selected">
             <a href="#">Streming</a>
           </div>
-          <div class="anchor week">
+          <div class="anchor ">
             <a href="#">On tv</a>
           </div>
-          <div class="anchor week">
+          <div class="anchor ">
             <a href="#">For rent</a>
           </div>
-          <div class="anchor week">
+          <div class="anchor ">
             <a href="#">On theaters</a>
           </div>
         </div>
@@ -158,6 +172,7 @@
 
 
 
+</script>
 
 
   <%- include("footer.ejs") %>

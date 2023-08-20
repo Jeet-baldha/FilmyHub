@@ -1,19 +1,21 @@
-console.log("hello world!");
-$(".week").click(function (){
+$().ready(function() {
 
-    $("week").addClass("selected");
-    updateTrend("week");
+    $('.today').click(function() {
+        $('.today').addClass('selected');
+        $('.week').removeClass('selected');
+        $('.dayList').css('display', 'flex');
+        $('.weekList').css('display', 'none');
 
-    $(".today").removeClass("selected");
+    })
 
-})
+    $('.week').click(function() {
+        $('.week').addClass('selected');
+        $('.today').removeClass('selected');
+        $('.weekList').css('display', 'flex');
+        $('.dayList').css('display', 'none');
 
-$(".today").click(function (){
+    })
 
-    $("today").addClass("selected");
-    updateTrend("day");
+});
 
-    $(".week").removeClass("selected");
-
-})
 
