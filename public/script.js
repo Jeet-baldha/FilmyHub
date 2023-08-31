@@ -6,7 +6,7 @@ $().ready(function() {
         $('.dayList').css('display', 'flex');
         $('.weekList').css('display', 'none');
 
-    })
+    });
 
     $('.week').click(function() {
         $('.week').addClass('selected');
@@ -14,7 +14,7 @@ $().ready(function() {
         $('.weekList').css('display', 'flex');
         $('.dayList').css('display', 'none');
 
-    })
+    });
 
 });
 

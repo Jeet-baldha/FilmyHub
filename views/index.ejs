@@ -35,7 +35,7 @@
         <% if (trendingMovieListDay) { %>
           <% for (const movie of trendingMovieListDay.results) { %>
             <div class="movie-card">
-              <img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" />
+              <a href="/movie/<%= movie.id %>"><img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" /></a>
               <div class="details">
                 <div class="rating" style="font-size: 12px">
                   <%= movie.vote_average.toFixed(2) %>
@@ -56,7 +56,7 @@
         <% if (trendingMovieListWeek) { %>
           <% for (const movie of trendingMovieListWeek.results) { %>
             <div class="movie-card">
-              <img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" />
+              <a href="/<%= movie.id %>"></a><img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" />
               <div class="details">
                 <div class="rating" style="font-size: 12px">
                   <%= movie.vote_average.toFixed(2) %>
@@ -99,7 +99,7 @@
         </div>
 
         <div class="column-content flex">
-          <% if (latestMovieList) { %>
+          <% if (locals.latestMovieList) { %>
             
             <% for (const movie of latestMovieList) { %>
               <div class="trailer-card">

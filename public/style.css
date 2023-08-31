@@ -298,11 +298,77 @@ iframe{
     font-size: 22px;
     justify-content: space-between;
 }
+
+/* ========================  MOVIE PAGE ================================ */
+
+
+  
+
+.movie-details{
+    
+    background-size: cover;
+    background-repeat: no-repeat;
+    padding: 50px 0;
+}
+
+.movie-overview{
+    padding: 50px 50px;
+    color: #ffffff;
+    flex-direction: column;
+    gap: 30px;
+}
+
+.movie-container{
+    background-size: cover;
+    background-repeat: no-repeat;
+}
+
+
+.movie-details img{
+    width: 300px;
+    border-radius: 15px;
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+}
+
+
+.icon{
+    font-size: 18px;
+    background-color: #11999E;
+    color: #E4F9F5;
+    border-radius: 50%;
+    margin-right: 30px;
+    width: 40px;
+    height: 40px;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    list-style-type: none;
+}
+
+.overview-text{
+    text-align: justify;
+}
+
+.production-details{
+    justify-content: space-between;
+    width: 60%;
+}
+
+
+
+
+
+
+
+
 @media screen and (max-width: 1500px) {
     .inner-content{
         margin: 0;
     }
 }
+
+
 
 @media screen and (max-width: 500px){
 

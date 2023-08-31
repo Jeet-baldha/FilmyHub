@@ -14,7 +14,6 @@ const config = {
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
 
-
 app.get('/', async (req, res) =>{
     try {
         let trendingMovieListDay = await axios.get(url +"trending/movie/day",config);
@@ -55,7 +54,7 @@ app.get('/week', async (req, res) =>{
 
     try {
         let trendingMovieList = await axios.get(url +"trending/movie/week",config);
-        let popularMovieList = await axios.get(url +"/movie/popular",config);
+        let popularMovieList = await axios.get(url +"movie/popular",config);
         res.render('index',{
             trendingMovieList:trendingMovieList.data,
             popularMovieList:popularMovieList.data
@@ -65,6 +64,21 @@ app.get('/week', async (req, res) =>{
     }
 
 });
+
+    app.get('/movie/:id',async (req, res) =>{
+
+
+       try {
+         let movieDetails =  await axios.get(`https://api.themoviedb.org/3/movie/${req.params.id}`,config);
+ 
+         res.render("movie",{
+             movie:movieDetails.data
+         })
+       } catch (error) {
+        res.status(500).json({ message: "Error fetching post" });
+       }
+
+    });
 
 app.listen(port, (req, res) =>{
     console.log('listening on port '+port);
