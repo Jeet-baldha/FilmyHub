@@ -50,32 +50,20 @@ app.get('/', async (req, res) =>{
 
 });
 
-app.get('/week', async (req, res) =>{
 
-    try {
-        let trendingMovieList = await axios.get(url +"trending/movie/week",config);
-        let popularMovieList = await axios.get(url +"movie/popular",config);
-        res.render('index',{
-            trendingMovieList:trendingMovieList.data,
-            popularMovieList:popularMovieList.data
-        });
-    } catch (error) {
-        res.status(404).send(error.message);
-    }
-
-});
 
     app.get('/movie/:id',async (req, res) =>{
 
 
        try {
-         let movieDetails =  await axios.get(`https://api.themoviedb.org/3/movie/${req.params.id}`,config);
- 
+         let movieDetails =  await axios.get(`${url}movie/${req.params.id}`,config);
+         let castDetails = await axios.get(`${url}movie/${req.params.id}/credits?language=en-US`,config);
          res.render("movie",{
-             movie:movieDetails.data
+             movie:movieDetails.data,
+             casts:castDetails.data
          })
        } catch (error) {
-        res.status(500).json({ message: "Error fetching post" });
+        res.status(404).send(error.message);
        }
 
     });

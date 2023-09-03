@@ -5,6 +5,8 @@
 }
 
 body {
+    background-color: #F1F5F9;
+    color: #1E1E1E;
     font-family: 'YourFontName', sans-serif; /* Apply the font to the body or specific elements */
 }
 
@@ -192,21 +194,18 @@ input::placeholder{
 }
 
 .column-content{
-    padding-left: 30px;
-    margin-top: 40px;
+    padding: 30px;
+
     gap: 30px;
     overflow-x: scroll;
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-    &::-webkit-scrollbar {
-        display: none; /* Chrome and Safari */
-      }
+   
 }
 
 
 .movie-card{
     width: 150px;
-    
+    box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
 }
 
 .blur{
@@ -216,7 +215,8 @@ input::placeholder{
 .movie-card img{
     width: 150px;
     height: auto;
-    border-radius: 7px;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
 }
 .details{
     position: relative;
@@ -309,6 +309,7 @@ iframe{
     background-size: cover;
     background-repeat: no-repeat;
     padding: 50px 0;
+    background-color: #1e1e1ecb;    
 }
 
 .movie-overview{
@@ -327,7 +328,7 @@ iframe{
 .movie-details img{
     width: 300px;
     border-radius: 15px;
-    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.5);
+    box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.2);
 }
 
 
@@ -355,7 +356,70 @@ iframe{
     width: 60%;
 }
 
+.cast-list{
+    margin-top: 10px;
+    padding: 40px 0;
+}
 
+.cast-list .column-content{
+    padding: 40px 0;
+}
+.cast-card{
+    width: 150px;
+    box-shadow: 1px 5px 12px rgba(0, 0, 0, 0.2);
+    border-radius: 7px;
+}
+
+.cast-card img{
+    min-width: 150px;
+    width: 150px;
+    height: auto;
+    border-top-left-radius: 7px;
+    border-top-right-radius: 7px;
+}
+
+.view-more {
+    width: 150px;
+    min-width: 150px;
+    align-self: center;
+    padding: 10 px;
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.full-cast-link{
+    padding: 10px 0;
+}
+
+
+
+
+
+
+
+
+/* ================================================================ scrollbar edit ============================================================================================ */
+::-webkit-scrollbar {
+    width:10px;
+    height: 7px;    
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    border-radius: 10px;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: rgba(198, 198, 198, 0.5); 
+    transition: 1s;
+    border-radius: 8px;
+  }
+  
+  /* Handle on hover */
+  ::-webkit-scrollbar-thumb:hover {
+    background: rgba(198, 198, 198, 0.8);
+  }
 
 
 

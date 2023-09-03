@@ -3,39 +3,41 @@
 <div class="background-image"></div>
 <section class="movie-container" style="background-image: url('https://image.tmdb.org/t/p/w500/<%= movie.backdrop_path %>');">
     <% if(locals.movie) {%>
-    <div class="movie-details inner-content flex">
-        <img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="">
-
-        <div class="movie-overview  flex">
-
-            <h2><%= movie.original_title %></h2>
-            <ul class="flex" style="gap: 25px;">
-                <li style="list-style-type: none;"><%= movie.release_date %></li>
-                <% movie.genres.forEach(element => { %> 
-           
-                        <li><%= element.name %></li>
+    <div class="movie-details">
         
-                <% }); %>
-                <li>2h 14min</li>
-            </ul>       
-
-            <div class="movie-icons flex">
+        <div class="inner-content flex">
+            <img id="poster-image" src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="">
+            
+            <div class="movie-overview  flex">
+                
+                <h2><%= movie.original_title %></h2>
+                <ul class="flex" style="gap: 25px;">
+                    <li style="list-style-type: none;"><%= movie.release_date %></li>
+                    <% movie.genres.forEach(element => { %> 
+                        
+                        <li><%= element.name %></li>
+                        
+                        <% }); %>
+                        <li>2h 14min</li>
+                    </ul>       
+                    
+                    <div class="movie-icons flex">
                   <div class="user-score flex">
                     <div class="icon" style="margin: 0;"><%= movie.vote_average.toFixed(2) %></div>
                     <p style="width: 50px;padding: 8px;margin-right: 30px;">User Score</p>
-                  </div>
-                  
-                  <li class="icon"><i class=" fa-solid fa-list"></i></li>
-                  <li class="icon"><i class=" fa-solid fa-heart"></i></li>
-                  <li class="icon"><i class=" fa-solid fa-bookmark"></i></li>
-                  <li class="icon"><i class=" fa-solid fa-star"></i></li>
+                </div>
+                
+                <li class="icon"><i class=" fa-solid fa-list"></i></li>
+                <li class="icon"><i class=" fa-solid fa-heart"></i></li>
+                <li class="icon"><i class=" fa-solid fa-bookmark"></i></li>
+                <li class="icon"><i class=" fa-solid fa-star"></i></li>
             </div>
-
+            
             <div> 
                 <h4>Overview</h4>
                 <p class="overview-text"><%= movie.overview %></p>
             </div>
-
+            
             <div class="production-details flex">
                 <div class>
                     <h4>Greg Rucka</h4>
@@ -50,12 +52,59 @@
                     <p>Screenplay, Story</p>
                 </div>
             </div>
-
-
+            
+            
         </div>
     </div>
-<% } %>
-
+    <% } %>
+    
+</div>
 </section>
+
+<section class="inner-content">
+
+<div class="cast-list">
+
+    <h1>Top Billed Cast</h1>
+    <div class="column-content flex">
+        <% const n = casts.cast.length %>
+        <% let i = 0 %>
+        <% if(locals.casts){ %>
+            <% for( i = 0;i<10 && i < n ;i++){ %>
+                <% const person = casts.cast[i] %>
+                <div class="cast-card">
+                    <% if(person.profile_path === null) {%>
+                        <img src="https://www.pphfoundation.ca/wp-content/uploads/2018/05/default-avatar.png">
+                        <% }else{ %>
+                            <img src="https://image.tmdb.org/t/p/w500/<%= person.profile_path %>">
+                            <% } %>
+                            <div class=" details">
+                                <h4><%= person.name %></h4>
+                                <p><%= person.character %></p>
+                            </div>
+                        </div>    
+                        <% }} %>
+                        <% if(i < n) {%>
+                        <div class="view-more">
+                            <a href="#">View More <i class="fa-solid fa-arrow-right"></i></a>
+                        </div>
+                        <% } %>
+    </div>
+
+    <h4  class="full-cast-link"><a href="#">Full Cast & Crew</a></h4>
+    <hr>
+</div>
+</section>
+
+    <!-- <script src="../node_modules/colorthief/dist/color-thief.umd.js"></script>
+    <script>
+        $(window).ready(function(){
+        var sourceImage = document.getElementById("poster-image").src;
+        var colorThief = new ColorThief();
+        var color = colorThief.getColor(sourceImage);
+        console.log(color);
+        document.querySelector(".movie-details").style.backgroundColor = "rgb(" + color + ")";
+        });
+    </script> -->
 
 <%- include("footer.ejs") %>
