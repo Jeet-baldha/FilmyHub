@@ -21,7 +21,8 @@
 
                 <ul class="flex nav-flex">
 
-                    <li class="nav-item"><a href="" class="nav-link">Movie</a></li>
+                    <li class="nav-item"><a href="/" class="nav-link"><i class="fa-solid fa-house"></i></a></li>
+                    <li class="nav-item"><a href="/movie" class="nav-link">Movie</a></li>
                     <li class="nav-item"><a href="" class="nav-link">Tv show</a></li>
                     <li class="nav-item"><a href="" class="nav-link">People</a></li>
 
@@ -38,8 +39,13 @@
                     <li class="nav-item">
                         <i class="fa-solid fa-user" id="profile"></i>
                     </li>
+                   
                     <li class="nav-item">
-                        <i class="fa-solid fa-magnifying-glass" id="search-icon"></i>
+                        <form action="/search" method="get">
+                            <input type="text" name="query" class="search-text">
+                            <button type="submit" class="search-btn nav-item"><i class="fa-solid fa-magnifying-glass" id="search-icon"></i></button>
+                        </form>
+                        
                     </li>
                 </ul>
 

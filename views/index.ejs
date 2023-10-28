@@ -1,16 +1,16 @@
 <%- include("navbar.ejs") %>
 
 
-  <section class="media-discover inner-content">
-    <div class="media-container">
+<section class="media-discover inner-content">
+  <div class="media-container">
       <div class="title">
         <h1>Welcome</h1>
         <h3>Millions of movies, TV shows and people to discover. Explore now.</h3>
       </div>
 
       <div class="search">
-        <form action="" id="search-form">
-          <input type="text" name="search" placeholder="search for Movie, TV show and person..." />
+        <form action="/search" id="search-form" method="get">
+          <input type="text" name="query" placeholder="search for Movie, TV show and person..." />
           <button type="submit">Search</button>
         </form>
       </div>
@@ -30,7 +30,7 @@
           </div>
         </div>
       </div>
-
+      
       <div class="column-content flex dayList">
         <% if (trendingMovieListDay) { %>
           <% for (const movie of trendingMovieListDay.results) { %>

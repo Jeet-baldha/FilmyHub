@@ -18,7 +18,7 @@
                         <li><%= element.name %></li>
                         
                         <% }); %>
-                        <li>2h 14min</li>
+                        
                     </ul>       
                     
                     <div class="movie-icons flex">
@@ -70,7 +70,7 @@
         <% const n = casts.cast.length %>
         <% let i = 0 %>
         <% if(locals.casts){ %>
-            <% for( i = 0;i<10 && i < n ;i++){ %>
+            <% for( i = 0;i<20 && i < n ;i++){ %>
                 <% const person = casts.cast[i] %>
                 <div class="cast-card">
                     <% if(person.profile_path === null) {%>

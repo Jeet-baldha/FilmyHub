@@ -84,6 +84,32 @@ a{
     color: #30E3CA;
 }
 
+
+.nav-item form input[type = "text"]{
+    border: none;
+    outline: none;
+    padding: 0px 13px;
+    position: relative;
+    top: -3px;
+    border-radius: 15px;
+    width: 200px;
+    height: 25px;
+}
+
+.search-btn{
+    background-color:  #11999E;
+    border: none;
+    outline: none;
+    margin: 0 !important;
+    padding-left: 10px;
+
+    
+}
+
+.search-btn:hover{
+    cursor: pointer;
+}
+
 .media-discover{
     background: url(assest/image/media-discover-poster.png);
     background-size: cover;
@@ -95,6 +121,8 @@ a{
 
 .inner-content{
     margin: 0 100px;
+    padding: 20px 0;
+    
 }
 
 .title{
@@ -168,6 +196,7 @@ input::placeholder{
 
 .non-clickable{
     pointer-events: none;
+    cursor: pointer;
 }
 
 .weekList{
@@ -191,14 +220,13 @@ input::placeholder{
 
 .anchor a{
     color: black;
+    cursor: pointer;
 }
 
 .column-content{
     padding: 30px;
-
     gap: 30px;
     overflow-x: scroll;
-   
 }
 
 
@@ -206,6 +234,9 @@ input::placeholder{
     width: 150px;
     box-shadow: 5px 5px 12px rgba(0, 0, 0, 0.2);
     border-radius: 7px;
+    padding-bottom: 5px;
+    background-color: white;
+
 }
 
 .blur{
@@ -223,6 +254,7 @@ input::placeholder{
     top: 0;
     left: 0;
     margin:15px 0 0 10px
+    
 }
 
 .rating{
@@ -358,7 +390,7 @@ iframe{
 
 .cast-list{
     margin-top: 10px;
-    padding: 40px 0;
+    padding: 40px 10px;
 }
 
 .cast-list .column-content{
@@ -368,6 +400,7 @@ iframe{
     width: 150px;
     box-shadow: 1px 5px 12px rgba(0, 0, 0, 0.2);
     border-radius: 7px;
+    padding-bottom: 5px;
 }
 
 .cast-card img{
@@ -392,9 +425,33 @@ iframe{
 }
 
 
+/* ========================================================== movie list page ======================================================================== */
+
+.movie-content{
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+    padding: 50px 10px;
+    gap: 30px;
+    /* place-items: center;  */     
+}
+
+.btn-load-more{
+    width: 100%;    
+    background:linear-gradient(to right,#30E3CA 0%,#11999E 100%);
+    color: #E4F9F5;
+    border: none;
+    outline: none;
+    border-radius: 5px;
+    font-size: 20px;
+    font-weight: 900;
+    padding: 10px 0;
+}
 
 
 
+.btn-load-more:hover{
+    cursor: pointer;
+}
 
 
 
