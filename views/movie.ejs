@@ -5,8 +5,10 @@
     <% if(locals.movie) {%>
     <div class="movie-details">
         
-        <div class="inner-content flex">
-            <img id="poster-image" src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="">
+        <div class="inner-content flex " id="movie-title-box">
+            <div>
+                <img id="poster-image" src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="">
+            </div>
             
             <div class="movie-overview  flex">
                 

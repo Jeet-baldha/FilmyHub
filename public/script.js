@@ -18,12 +18,12 @@ $().ready(function() {
 
     $('.search-btn').hover(
         function() {
-            // Your code for mouseenter
+            // code for mouseenter
            
 
         },
         function() {
-            // Your code for mouseleave
+            // code for mouseleave
         }
     );
 

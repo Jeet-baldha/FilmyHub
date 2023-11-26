@@ -1,5 +1,8 @@
 import express from "express";
 import axios from "axios";
+import React from 'react';
+import { renderToString } from 'react-dom/server';
+// import Cast from "./Cast";
 
 const app = express();
 var port = 3000;
@@ -19,29 +22,29 @@ app.get('/', async (req, res) => {
         let trendingMovieListDay = await axios.get(url + "trending/movie/day", config);
         let trendingMovieListWeek = await axios.get(url + "trending/movie/week", config);
         let popularMovieList = await axios.get(url + "movie/popular", config);
-        let resplonse = await axios.get('https://api.themoviedb.org/3/discover/movie?release_date.desc', config);
-        let latestMovieList =[];
+        // let resplonse = await axios.get('https://api.themoviedb.org/3/discover/movie?release_date.desc', config);
+        // let latestMovieList =[];
 
-        for(let i = 0;i<20;i++){
-            let movie = resplonse.data.results[i];
-            movie = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/videos?language=en-US`,config);
-            movie = movie.data.results;
-            if(movie.length > 0){
+        // for(let i = 0;i<20;i++){
+        //     let movie = resplonse.data.results[i];
+        //     movie = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/videos?language=en-US`,config);
+        //     movie = movie.data.results;
+        //     if(movie.length > 0){
                 
-                for(let j = 0;j < movie.length;j++) {
-                    if(movie[j].type === 'Trailer'){
-                        latestMovieList.push(movie[j]); break
-                    }
-                };
+        //         for(let j = 0;j < movie.length;j++) {
+        //             if(movie[j].type === 'Trailer'){
+        //                 latestMovieList.push(movie[j]); break
+        //             }
+        //         };
 
-            }
-        }
+        //     }
+        // }
 
         res.render('index', {
             trendingMovieListDay: trendingMovieListDay.data,
             trendingMovieListWeek: trendingMovieListWeek.data,
             popularMovieList: popularMovieList.data,
-            latestMovieList:latestMovieList  
+            // latestMovieList:latestMovieList  
         });
     } catch (error) {
         res.status(404).send(error.message);
@@ -66,8 +69,8 @@ app.get('/search', async (req, res) => {
             return;
         }
 
-        // Replace spaces with "%20" in the query
         const newQuery = query.replace(/ /g, '%20');
+
         let movies = await axios.get(url + `/search/movie?query=${newQuery}&include_adult=false`, config);
         res.render("movieList", {
             movieList: movies.data,
@@ -78,7 +81,6 @@ app.get('/search', async (req, res) => {
 
 
 app.get('/movie/:id', async (req, res) => {
-
 
     try {
         let movieDetails = await axios.get(`${url}movie/${req.params.id}`, config);
@@ -92,6 +94,14 @@ app.get('/movie/:id', async (req, res) => {
     }
 
 });
+
+
+app.get('/cast', (req,res) =>{
+    const reactMarkup = ReactDOMServer.renderToString(React.createElement(Cast));
+    res.render("cast", {
+        reactMarkup: reactMarkup
+    })
+});  
 
 app.listen(port, (req, res) => {
     console.log('listening on port ' + port);
