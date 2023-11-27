@@ -1,6 +1,6 @@
-$().ready(function() {
+$().ready(function () {
 
-    $('.today').click(function() {
+    $('.today').click(function () {
         $('.today').addClass('selected');
         $('.week').removeClass('selected');
         $('.dayList').css('display', 'flex');
@@ -8,7 +8,7 @@ $().ready(function() {
 
     });
 
-    $('.week').click(function() {
+    $('.week').click(function () {
         $('.week').addClass('selected');
         $('.today').removeClass('selected');
         $('.weekList').css('display', 'flex');
@@ -17,32 +17,26 @@ $().ready(function() {
     });
 
     $('.search-btn').hover(
-        function() {
+        function () {
             // code for mouseenter
-           
+
 
         },
-        function() {
+        function () {
             // code for mouseleave
         }
     );
 
-    
-    
-    
-    
-    
-
     var page = 2;
     const apiKey = "73b27bfeb96b523c9a9f0eeabaa2b90f";
-    $('#load-more').click(function(){
+    $('#load-more').click(function () {
 
         var url = `https://api.themoviedb.org/3/movie/popular?page=${page}&api_key=${apiKey}`;
-        let html = "";  
-        $.get(url,function(data){
+        let html = "";
+        $.get(url, function (data) {
             data.results.forEach(movie => {
                 html += `<div class="movie-card">
-                <a href="/movie/${movie.id}"><img src="https://image.tmdb.org/t/p/w500/${ movie.poster_path}"
+                <a href="/movie/${movie.id}"><img src="https://image.tmdb.org/t/p/w500/${movie.poster_path}"
                         alt="${movie.title} Poster" /></a>
                         <div class="details">
                     <div class="rating" style="font-size: 12px">
@@ -60,10 +54,7 @@ $().ready(function() {
             $(".movie-content").append(html);
             page++;
         });
-
-
     });
-    
 
 });
 

@@ -12,20 +12,20 @@
                 <div class="movie-card">
                     <% if ( movie.poster_path && movie.poster_path.trim() !== ''){ %>
                     <a href="/movie/<%= movie.id %>"><img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>"
-                            alt="<%= movie.title %> Poster" /></a>
+                            alt="<%= movie.name %> Poster" /></a>
                     <% } else{ %>
                         <a href="/movie/<%= movie.id %>"><img src="assest/image/movieDefualt.png"
-                            alt="<%= movie.title %> Poster" /></a>
+                            alt="<%= movie.name %> Poster" /></a>
                     <% } %>
                             <div class="details">
                         <div class="rating" style="font-size: 12px">
                             <%= movie.vote_average.toFixed(2) %>
                         </div>
                         <h4 class="movie-name">
-                            <%= movie.title %>
+                            <%= movie.name %>
                         </h4>
                         <p class="movie-date" style="font-size: 12px">
-                            <%= movie.release_date %>
+                            <%= movie.first_air_date %>
                         </p>
                     </div>
                 </div>

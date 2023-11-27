@@ -32,7 +32,7 @@
       </div>
       
       <div class="column-content flex dayList">
-        <% if (trendingMovieListDay) { %>
+        <% if (locals.trendingMovieListDay) { %>
           <% for (const movie of trendingMovieListDay.results) { %>
             <div class="movie-card">
               <a href="/movie/<%= movie.id %>"><img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" /></a>
@@ -53,7 +53,7 @@
       </div>
 
       <div class="column-content flex weekList">
-        <% if (trendingMovieListWeek) { %>
+        <% if (locals.trendingMovieListWeek) { %>
           <% for (const movie of trendingMovieListWeek.results) { %>
             <div class="movie-card">
               <a href="/movie/<%= movie.id %>"><img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" /></a>
@@ -148,7 +148,7 @@
       </div>
 
       <div class="popular column-content flex">
-        <% if (popularMovieList) { %>
+        <% if (locals.popularMovieList) { %>
           <% for (const movie of popularMovieList.results) { %>
             <div class="movie-card">
               <a href="/movie/<%= movie.id %>"><img src="https://image.tmdb.org/t/p/w500/<%= movie.poster_path %>" alt="<%= movie.title %> Poster" /></a>
