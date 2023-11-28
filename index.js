@@ -82,24 +82,35 @@ passport.use(new LocalStrategy((usernameOrEmail, password, done) => {
         return done(err);
       });
   }));
-  
-  
+
 passport.use(new GoogleStrategy({
-    clientID:process.env.GOOGLE_CLIENT_ID,
-    clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://localhost:3000/auth/google/user",
-    userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-  },
-  function(accessToken, refreshToken, profile, cb) {
-    
-    User.findOrCreate({ googleId: profile.id },
-         { $set: { username: profile.displayName } }, 
-         { new: true, upsert: true },
-         function (err,user) {
-        return cb(err, user);
-    });
+  clientID: process.env.GOOGLE_CLIENT_ID,
+  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
+  callbackURL: "http://localhost:3000/auth/google/user",
+  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
+},
+async function(accessToken, refreshToken, profile, cb) {
+  // Use the findOrCreate method provided by the plugin
+  try {
+    let user = await User.findOne({ googleId: profile.id });
+    const username = profile.displayName.replace(' ', '');
+  
+    if(!user){
+      user = new User({
+        googleId: profile.id,
+        username: username
+      });
+    }
+  
+    await user.save();
+  
+    return cb(null, user);
+  } catch (error) {
+    returncb(error, null);
   }
+}
 ));
+
 
 passport.use(new FacebookStrategy({
     clientID: process.env.FACEBOOK_APP_ID,

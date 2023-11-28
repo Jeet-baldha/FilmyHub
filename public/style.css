@@ -483,7 +483,7 @@
 
 
 
-    #menu-btn, #close-btn {
+    #menu-btn, #close-btn, #user-btn {
         display: none;
     }
 
@@ -527,9 +527,7 @@
             padding-top: 50px;
         }
         
-        .nav-right{
-            display: none;
-        }
+        
         #home-btn{
             padding-top: 10px !important;
         }
@@ -619,6 +617,17 @@
             color: #11999E;
             padding:4px 5px;
             border-radius: 50%;
+        }
+
+        #user-btn{
+            display: block !important;
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            background-color: #11999E;
+            color: white;
+            border-radius: 50%;
+            padding: 9px;
         }
 
 
