@@ -8,8 +8,9 @@ import passport  from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
 import GoogleStrategy from 'passport-google-oauth20'
 import FacebookStrategy from 'passport-facebook'
+import { Strategy as LocalStrategy } from 'passport-local';
 import findOrCreate from 'mongoose-findorcreate';
-
+import flash from 'connect-flash'
 
 const app = express();
 var port = 3000;
@@ -21,20 +22,26 @@ const config = {
     headers: { Authorization: 'Bearer ' + BearerToken },
 }
 
+
 app.use(session({
     secret:process.env.MONGOOSE_SECRET,
     resave:false,
-    saveUninitialized:false
+    saveUninitialized:false,
+    cookie: {
+        maxAge: 24 * 60 * 60 * 1000, // 1 day (in milliseconds)
+        // Other cookie options if needed...
+    },
 }));
+app.use(flash());
 
 app.use(passport.initialize());
-app.use(passport.session());
+app.use(passport.session()); 
 
 
 mongoose.connect("mongodb://localhost:27017/filmyHubDB");
 
 const userShecma = new mongoose.Schema({
-    // username:String,
+    username:String,
     email:String,
     password:String,
     googleId:String,
@@ -50,6 +57,33 @@ passport.use(User.createStrategy());
 passport.serializeUser((User, done)=> {done(null, User); });
 passport.deserializeUser((User, done)=>{done(null, User);});
 
+passport.use(new LocalStrategy((usernameOrEmail, password, done) => {
+    User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] })
+      .then(user => {
+        if (!user) {
+          return done(null, false, { message: 'Incorrect username or email.' });
+        }
+  
+        // Use the authenticate method provided by passport-local-mongoose
+        user.authenticate(password, (err, authenticatedUser) => {
+          if (err) {
+            return done(err);
+          }
+  
+          if (!authenticatedUser) {
+            return done(null, false, { message: 'Incorrect password.' });
+          }
+  
+          // If authentication is successful, return the user
+          return done(null, authenticatedUser);
+        });
+      })
+      .catch(err => {
+        return done(err);
+      });
+  }));
+  
+  
 passport.use(new GoogleStrategy({
     clientID:process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
@@ -58,8 +92,10 @@ passport.use(new GoogleStrategy({
   },
   function(accessToken, refreshToken, profile, cb) {
     
-    User.findOrCreate({ googleId: profile.id }, function (err,user) {
-        console.log(profile);
+    User.findOrCreate({ googleId: profile.id },
+         { $set: { username: profile.displayName } }, 
+         { new: true, upsert: true },
+         function (err,user) {
         return cb(err, user);
     });
   }
@@ -107,7 +143,10 @@ axios.interceptors.response.use(null, async (error) => {
 });
 
 app.get('/', async (req, res) => {
-    console.log(req.user);
+    if(req.isAuthenticated()){
+
+        console.log(req.user);
+    }
     try {
         let trendingMovieListDay = await axios.get(url + "trending/movie/day", config);
         let trendingMovieListWeek = await axios.get(url + "trending/movie/week", config);
@@ -217,20 +256,22 @@ app.get('/signup', (req, res) => {
 });
 
 
-app.post('/signup', (req, res) =>{
-    User.register({username:req.body['email']},req.body['password'], function(err,nUser){
+app.post('/signup', (req, res) => {
+
+    User.register({username:req.body['username'],email:req.body.email},req.body['password'],function(err,nuser){
         if(err){
-            console.log(err);
+            console.log(err.message);
             res.redirect('/signup');
         }
         else{
-            User.authenticate('local') (req,res,() =>{
-                console.log(nUser);
+            passport.authenticate('local') (req, res, () =>{
                 res.redirect('/');
-            })
+            });
         }
     })
+
 })
+
 
 app.get('/auth/facebook',
   passport.authenticate('facebook')
@@ -262,9 +303,9 @@ app.get('/login', (req, res) => {
 
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/',
-    failureRedirect: '/login'
-    
-}));
+    failureRedirect: '/login',
+    failureFlash: true, // Enable flash messages if needed
+  }));
 
 
 app.listen(port, (req, res) => {

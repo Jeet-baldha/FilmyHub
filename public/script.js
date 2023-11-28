@@ -16,16 +16,13 @@ $().ready(function () {
 
     });
 
-    $('.search-btn').hover(
-        function () {
-            // code for mouseenter
+    $('#menu-btn').click(function () {
+        $('.navbar').css('left','0');
+    });
 
-
-        },
-        function () {
-            // code for mouseleave
-        }
-    );
+    $('#close-btn').click(function () {
+        $('.navbar').css('left','-250px');
+    });
 
     var page = 2;
     const apiKey = "73b27bfeb96b523c9a9f0eeabaa2b90f";

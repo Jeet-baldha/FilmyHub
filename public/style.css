@@ -483,7 +483,9 @@
 
 
 
-
+    #menu-btn, #close-btn {
+        display: none;
+    }
 
 
     @media screen and (max-width: 1500px) {
@@ -494,11 +496,45 @@
 
 
 
-    @media screen and (max-width: 500px){
+    @media screen and (max-width: 850px){
 
         .navbar{
+            display: block;
+            height: 100vh;
+            position: fixed;
+            width: 200px;
+            justify-content: baseline;
+            z-index: 22;
+            left: -250px;
+            transition: 0.5s;
+        }
+
+        #menu-btn{
+            display: block;
+            position: absolute;
+            top: 10px;
+            left: 20px;
+            font-size: 18px !important;
+            background-color:#11999E;
+            color: white;
+            padding:9px;
+            border-radius: 50%;
+        }
+        .nav-flex{
+            display: block;
+        }
+        .nav-item{
+            padding-top: 50px;
+        }
+        
+        .nav-right{
             display: none;
-            overflow-x: hidden;
+        }
+        #home-btn{
+            padding-top: 10px !important;
+        }
+        .nav-item form{
+            display: none;
         }
 
         .title{
@@ -563,6 +599,26 @@
             align-items: center;
             overflow: hidden;
             padding: 0 20px;
+        }
+        
+        .movie-overview{
+            padding: 8px;
+        }
+        .production-details{
+            justify-content: space-around;
+            width: auto;
+        }
+
+        #close-btn{
+            display: block;
+            position: absolute;
+            right: 10px;
+            top: 30px;
+            font-size: 20px !important;
+            background-color: white;
+            color: #11999E;
+            padding:4px 5px;
+            border-radius: 50%;
         }
 
 
