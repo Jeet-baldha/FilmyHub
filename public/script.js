@@ -1,3 +1,5 @@
+
+
 $().ready(function () {
 
     $('.today').click(function () {
@@ -23,6 +25,23 @@ $().ready(function () {
     $('#close-btn').click(function () {
         $('.navbar').css('left','-250px');
     });
+
+    $('.fa-user').click(function () {
+        $('.drop-down-box').css('display', 'block');
+    })
+
+
+    $(".drop-down-box").hover(function(){
+        $('.drop-down-box').css('display', 'block');
+      },
+      function(){
+        $('.drop-down-box').css('display', 'none');
+    });
+
+
+
+
+
 
     var page = 2;
     const apiKey = "73b27bfeb96b523c9a9f0eeabaa2b90f";

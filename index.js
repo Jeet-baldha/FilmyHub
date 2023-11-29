@@ -4,7 +4,7 @@ import axios from "axios";
 import bodyParser from 'body-parser';
 import mongoose from 'mongoose';
 import session from "express-session";
-import passport  from 'passport';
+import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
 import GoogleStrategy from 'passport-google-oauth20'
 import FacebookStrategy from 'passport-facebook'
@@ -46,6 +46,7 @@ const userShecma = new mongoose.Schema({
     password:String,
     googleId:String,
     facebookId:String,
+    image:String,
 })
 
 userShecma.plugin(passportLocalMongoose);
@@ -113,14 +114,28 @@ async function(accessToken, refreshToken, profile, cb) {
 
 
 passport.use(new FacebookStrategy({
-    clientID: process.env.FACEBOOK_APP_ID,
-    clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://localhost:3000/auth/facebook/user"
+  clientID:process.env.FACEBOOK_APP_ID,
+  clientSecret: process.env.FACEBOOK_APP_SECRET,
+  callbackURL: "http://localhost:3000/auth/facebook/user",
+  profileFields: ['id', 'displayName', 'photos', 'email']
   },
-  function(accessToken, refreshToken, profile, cb) {
-    User.findOrCreate({ facebookId: profile.id }, function (err, user) {
-        return cb(err, user);
-    });
+  async function(accessToken, refreshToken, profile, cb) {
+   try {
+    console.log(profile);
+    let nuser = await User.findOne({facebookId:profile.id});
+   
+    if(!nuser){
+     nuser = new User({
+       facebookId: profile.id,
+       username: profile.displayName,
+     })
+     await nuser.save();
+
+     return cb(null, nuser);
+    }
+   } catch (error) {
+    return cb(error,null);
+   }
   }
 ));
 
@@ -153,10 +168,15 @@ axios.interceptors.response.use(null, async (error) => {
     throw error;
 });
 
+var isAuth = false;
+var username = "";
 app.get('/', async (req, res) => {
-    if(req.isAuthenticated()){
 
-        console.log(req.user);
+     isAuth  = req.isAuthenticated();
+     username = "";
+    if(isAuth){
+      console.log(req.user);
+      username = req.user.username;
     }
     try {
         let trendingMovieListDay = await axios.get(url + "trending/movie/day", config);
@@ -184,6 +204,8 @@ app.get('/', async (req, res) => {
             trendingMovieListDay: trendingMovieListDay.data,
             trendingMovieListWeek: trendingMovieListWeek.data,
             popularMovieList: popularMovieList.data,
+            isAuthenticated:isAuth,
+            username:username
             // latestMovieList:latestMovieList  
         });
     } catch (error) {
@@ -201,7 +223,9 @@ app.get('/movie', async (req, res) => {
      let popularMovieList = await axios.get(url + "movie/popular?page=1", config);
      res.render("movieList", {
          movieList: popularMovieList.data,
-         btn: true
+         btn: true,
+         isAuthenticated:isAuth,
+         username:username
      })
    } catch (error) {
     console.log(error.message);
@@ -215,7 +239,9 @@ app.get('/tv-show', async (req, res) => {
      let popularMovieList = await axios.get(url + "tv/popular?page=1", config);
      res.render("tv-showList", {
          movieList: popularMovieList.data,
-         btn: true
+         btn: true,
+         isAuthenticated:isAuth,
+         username:username
      })
    } catch (error) {
     console.log(error.message);
@@ -225,19 +251,25 @@ app.get('/tv-show', async (req, res) => {
 
 app.get('/search', async (req, res) => {
 
-        const query = req.query.query;
-        if (!query) {
-            res.send('No search query provided.');
-            return;
-        }
-
-        const newQuery = query.replace(/ /g, '%20');
-
-        let movies = await axios.get(url + `/search/movie?query=${newQuery}&include_adult=false`, config);
-        res.render("movieList", {
-            movieList: movies.data,
-            btn: false
-        })
+      try {
+          const query = req.query.query;
+          if (!query) {
+              res.send(404);
+          }
+  
+          const newQuery = query.replace(/ /g, '%20');
+  
+          let movies = await axios.get(url + `/search/movie?query=${newQuery}&include_adult=false`, config);
+          res.render("movieList", {
+              movieList: movies.data,
+              btn: false,
+              isAuthenticated:isAuth,
+              username:username
+          })
+      } catch (error) {
+        console.log(error.message);
+        res.redirect('/');
+      }
 
     })
 
@@ -249,7 +281,9 @@ app.get('/movie/:id', async (req, res) => {
         let castDetails = await axios.get(`${url}movie/${req.params.id}/credits?language=en-US`, config);
         res.render("movie", {
             movie: movieDetails.data,
-            casts: castDetails.data
+            casts: castDetails.data,
+            isAuthenticated:isAuth,
+            username:username
         })
     } catch (error) {
         res.status(404).send(error.message);
@@ -311,6 +345,13 @@ app.get('/login', (req, res) => {
     res.render('login');
 
 });
+
+app.get('/logout', (req, res) => {
+  req.logout(function(err) {
+    if (err) { return next(err); }
+    res.redirect('/');
+  });
+})
 
 app.post('/login', passport.authenticate('local', {
     successRedirect: '/',

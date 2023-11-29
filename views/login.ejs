@@ -8,19 +8,23 @@
     
     <link rel="stylesheet" href="login-signup.css">
     <link rel="stylesheet" href="bootstrap-social.css">
-    <title>Sign Up</title>
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/jquery.validate.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/jquery.validation/1.16.0/additional-methods.min.js"></script>
+    <script src="../validation.js"></script>
+    <title>Log In </title>
 </head>
 
 <body>
     <div class="form-container">
         <p class="title">Hey Moviegoer !</p>
-        <form class="form" method="post" action="/login">
+        <form class="form" id="login-form" method="post" action="/login">
             <input type="text" class="input" placeholder="Email or Username" name="username">
             <input type="password" class="input" placeholder="Password" name="password">
-            <button type="submit" class="form-btn">Log in</button>
+            <input type="submit" class="form-btn" name="submit">
         </form>
         <p class="sign-up-label">
-            Donn't have account <a href="/signup"><span class="sign-up-link">Sign up</span></a>
+            Don't have account <a href="/signup"><span class="sign-up-link">Sign up</span></a>
         </p>
         <div class="buttons-container">
             <a href="/auth/facebook">
@@ -56,6 +60,8 @@
             </a>
         </div>
     </div>
+
+
 </body>
 
 </html>

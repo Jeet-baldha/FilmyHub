@@ -5,7 +5,7 @@
         <div class="movie-content">
 
             
-            <% if(movieList){ %>
+            <% if(locals.movieList){ %>
 
             <% movieList.results.forEach(movie=> { %>
 
@@ -31,7 +31,7 @@
                 </div>
                 <%  }); %>
                 <% } else{%>
-                    <h1 class="error-message">No data found</h1>
+                    <h1 class="error-message"><%=  message%></h1>
                 <% } %>
             </div>
 

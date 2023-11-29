@@ -16,7 +16,7 @@
 
     <nav>
         <i class="fa-solid fa-bars" id="menu-btn"></i>
-        <a href="/signup"><i class="fa-solid fa-user" id="user-btn"></i></a>
+        <i class="fa-solid fa-user" id="user-btn"></i>
         <div class="navbar flex">
             <div class="nav-left inner-content">
 
@@ -43,12 +43,25 @@
                          </form>
                          
                      </li>
-                    <li class="nav-item">
-                        <a href="/signup"><i class="fa-solid fa-user" id="profile"></i></a>
+                     <li class="nav-item">
+                        <i class="fa-solid fa-user" id="profile"></i>
                     </li>
+                        
+                    
                 </ul>
-
+                
             </div>
         </div>
     </nav>
 
+    <% if(isAuthenticated === true){ %>
+    <div class="signup drop-down-box">
+            <li class="drop-down-item"><a href="#"> <%= username %> </a></li><hr>
+            <li class="drop-down-item"><a href="/logout">Logout</a></li>
+    </div>
+    <% } else{ %>
+        <div class="signup drop-down-box">
+            <li class="drop-down-item"><a href="/signup">signup</a></li><hr>
+            <li class="drop-down-item"><a href="/login">Login</a></li>
+        </div>
+    <% } %>

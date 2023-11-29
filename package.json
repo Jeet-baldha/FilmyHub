@@ -21,6 +21,7 @@
     "express-session": "^1.17.3",
     "find-or-create": "^2.0.0",
     "https": "^1.0.0",
+    "jquery-validation": "^1.20.0",
     "mongoose": "^8.0.1",
     "mongoose-findorcreate": "^4.0.0",
     "passport": "^0.6.0",
