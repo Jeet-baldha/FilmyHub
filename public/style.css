@@ -111,7 +111,7 @@
         box-shadow: 1px 1px 12px rgba(0, 0, 0, 0.244);
         background-color: white;
         position: fixed;
-        border-radius: 8px;
+        border-radius: 4px;
         right: 2px;
         top: 43px;
         transition: 0.5s;
@@ -137,8 +137,10 @@
     transition: 0.5s;
     }
 
-    .drop-down-item :hover{
-        background-color: #11999E;
+    .drop-down-box :hover{
+        background-color: rgb(229, 229, 229);
+        border-radius: 4px;
+        cursor: pointer;
     }
 
 
