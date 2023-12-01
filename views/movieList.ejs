@@ -19,7 +19,7 @@
                     <% } %>
                             <div class="details">
                         <div class="rating" style="font-size: 12px">
-                            <%= movie.vote_average.toFixed(2) %>
+                            <%= movie.vote_average%>
                         </div>
                         <h4 class="movie-name">
                             <%= movie.title %>
@@ -31,7 +31,7 @@
                 </div>
                 <%  }); %>
                 <% } else{%>
-                    <h1 class="error-message"><%=  message%></h1>
+                    <h1 class="error-message" style="display: block; width: 500px; height: 32vh;"><%=  message%></h1>
                 <% } %>
             </div>
 

@@ -6,15 +6,17 @@ import mongoose from 'mongoose';
 import session from "express-session";
 import passport from 'passport';
 import passportLocalMongoose from 'passport-local-mongoose';
-import GoogleStrategy from 'passport-google-oauth20'
 import FacebookStrategy from 'passport-facebook'
 import { Strategy as LocalStrategy } from 'passport-local';
 import findOrCreate from 'mongoose-findorcreate';
 import flash from 'connect-flash'
+import * as auth from './authentication.js'
+import User from './databse.js'
 
 const app = express();
 var port = 3000;
 app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.json());
 
 const url = "https://api.themoviedb.org/3/";
 const BearerToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzAzMmU2YjA4NDMzNmRlMWQ1MTVhMmJhMTEyYmFkOCIsInN1YiI6IjY0ZDNlNDcwZGQ5MjZhMDFlOTg3YmQ1NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nf3OISp0W87cprwZXdkN-4hgY0-dHR7k4w6o_TokVbI";
@@ -32,117 +34,19 @@ app.use(session({
         // Other cookie options if needed...
     },
 }));
-app.use(flash());
 
+app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session()); 
 
-
 mongoose.connect("mongodb://localhost:27017/filmyHubDB");
-
-const userShecma = new mongoose.Schema({
-    username:String,
-    email:String,
-    password:String,
-    googleId:String,
-    facebookId:String,
-    image:String,
-})
-
-userShecma.plugin(passportLocalMongoose);
-userShecma.plugin(findOrCreate);
-
-const User = mongoose.model("user",userShecma);
 
 passport.use(User.createStrategy());
 passport.serializeUser((User, done)=> {done(null, User); });
 passport.deserializeUser((User, done)=>{done(null, User);});
 
-passport.use(new LocalStrategy((usernameOrEmail, password, done) => {
-    User.findOne({ $or: [{ username: usernameOrEmail }, { email: usernameOrEmail }] })
-      .then(user => {
-        if (!user) {
-          return done(null, false, { message: 'Incorrect username or email.' });
-        }
-  
-        // Use the authenticate method provided by passport-local-mongoose
-        user.authenticate(password, (err, authenticatedUser) => {
-          if (err) {
-            return done(err);
-          }
-  
-          if (!authenticatedUser) {
-            return done(null, false, { message: 'Incorrect password.' });
-          }
-  
-          // If authentication is successful, return the user
-          return done(null, authenticatedUser);
-        });
-      })
-      .catch(err => {
-        return done(err);
-      });
-  }));
-
-passport.use(new GoogleStrategy({
-  clientID: process.env.GOOGLE_CLIENT_ID,
-  clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-  callbackURL: "http://localhost:3000/auth/google/user",
-  userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
-},
-async function(accessToken, refreshToken, profile, cb) {
-  // Use the findOrCreate method provided by the plugin
-  try {
-    let user = await User.findOne({ googleId: profile.id });
-    const username = profile.displayName.replace(' ', '');
-  
-    if(!user){
-      user = new User({
-        googleId: profile.id,
-        username: username
-      });
-    }
-  
-    await user.save();
-  
-    return cb(null, user);
-  } catch (error) {
-    returncb(error, null);
-  }
-}
-));
-
-
-passport.use(new FacebookStrategy({
-  clientID:process.env.FACEBOOK_APP_ID,
-  clientSecret: process.env.FACEBOOK_APP_SECRET,
-  callbackURL: "http://localhost:3000/auth/facebook/user",
-  profileFields: ['id', 'displayName', 'photos', 'email']
-  },
-  async function(accessToken, refreshToken, profile, cb) {
-   try {
-    console.log(profile);
-    let nuser = await User.findOne({facebookId:profile.id});
-   
-    if(!nuser){
-     nuser = new User({
-       facebookId: profile.id,
-       username: profile.displayName,
-     })
-     await nuser.save();
-
-     return cb(null, nuser);
-    }
-   } catch (error) {
-    return cb(error,null);
-   }
-  }
-));
-
-
 app.set('view engine', 'ejs');
 app.use(express.static("public"));
-
 
 
 
@@ -217,7 +121,6 @@ app.get('/', async (req, res) => {
 });
 
 
-
 app.get('/movie', async (req, res) => {
    try {
      let popularMovieList = await axios.get(url + "movie/popular?page=1", config);
@@ -283,81 +186,122 @@ app.get('/movie/:id', async (req, res) => {
             movie: movieDetails.data,
             casts: castDetails.data,
             isAuthenticated:isAuth,
-            username:username
+            username:username,
+            id:req.params.id
         })
     } catch (error) {
         res.status(404).send(error.message);
     }
 
 });
+app.post('/movie/add', async (req, res) => {
+  const id = req.body.id;
+
+  // Check if the user is authenticated
+  if (req.isAuthenticated()) {
+    const userID = req.user._id;
+
+    try {
+      const user = await User.findOne({ _id: userID });
+
+      if (user.watchList.includes(id)) {
+        res.status(200).json({ message: 'Movie is already in watchList' });
+      } else {
+        const result = await User.updateOne(
+          { _id: userID },
+          { $push: { watchList: id } }
+        );
+        res.status(201).json({ message: 'Movie added to watchList successfully' });
+      }
+    } catch (error) {
+      console.error('Error updating watchList:', error);
+      res.status(500).json({ error: 'Internal Server Error' });
+    }
+  } else {
+    res.status(401).json({ error: 'Unauthorized' });
+  }
+});
+
+
+app.get('/watchlist', async (req, res) => {
+  try {
+    if (isAuth) {
+      const userID = req.user._id;
+      const user = await User.findById(userID);
+
+      let movieList = {
+        results: []
+      };
+
+      if (user.watchList.length > 0) {
+        // Map movie IDs to an array of axios promises
+        const axiosPromises = user.watchList.map(async (id) => {
+          const movieDetails = await axios.get(`${url}movie/${id}`, config);
+          return movieDetails.data;
+        });
+
+        // Wait for all axios promises to resolve
+        const movieDetailsArray = await Promise.all(axiosPromises);
+
+        // Populate movieList with resolved movieDetails
+        movieList.results = movieDetailsArray;
+
+        res.render('movieList', {
+          movieList: movieList,
+          btn: false,
+          isAuthenticated: isAuth,
+          username: username
+        });
+      } else {
+        res.render('movieList',{
+          message:"Please add Movie in movieList",
+          btn: false,
+          isAuthenticated: isAuth,
+          username: username
+        });
+      }
+    } else {
+      res.status(401).json({ error: 'Unauthorized' });
+     
+    }
+  } catch (error) {
+    console.error('Error fetching watchlist:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+});
+
+
+
 
 
 
 
 app.get('/signup', (req, res) => {
-
     res.render("signup");
-
 });
 
 
-app.post('/signup', (req, res) => {
-
-    User.register({username:req.body['username'],email:req.body.email},req.body['password'],function(err,nuser){
-        if(err){
-            console.log(err.message);
-            res.redirect('/signup');
-        }
-        else{
-            passport.authenticate('local') (req, res, () =>{
-                res.redirect('/');
-            });
-        }
-    })
-
-})
-
+app.post('/signup', auth.signup);
 
 app.get('/auth/facebook',
   passport.authenticate('facebook')
 );
-
-app.get('/auth/facebook/user',
-  passport.authenticate('facebook', { failureRedirect: '/login' }),
-  function(req, res) {
-    res.redirect('/');
-});
+app.get('/auth/facebook/user',auth.facebookAuth);
 
 app.get('/auth/google',
   passport.authenticate('google', { scope: ['profile'] })
 );
 
-app.get('/auth/google/user', 
-  passport.authenticate('google', { failureRedirect: '/login' }),
-  function(req, res) {
-    // Successful authentication, redirect home.    
-    res.redirect('/');
-  });
-
+app.get('/auth/google/user', auth.googleAuth);
 
 app.get('/login', (req, res) => {
-
     res.render('login');
-
 });
 
-app.get('/logout', (req, res) => {
-  req.logout(function(err) {
-    if (err) { return next(err); }
-    res.redirect('/');
-  });
-})
+app.get('/logout', auth.logout)
 
-app.post('/login', passport.authenticate('local', {
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true, // Enable flash messages if needed
-  }));
+app.post('/login',auth.login );
+
 
 
 app.listen(port, (req, res) => {

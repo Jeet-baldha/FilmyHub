@@ -149,7 +149,7 @@
     }
 
     .media-discover{
-        background: url(assest/image/media-discover-poster.png);
+        background: url(../assest/image/media-discover-poster.png);
         background-size: cover;
         background-repeat: no-repeat;
         color: #E4F9F5;
@@ -418,6 +418,9 @@
         list-style-type: none;
     }
 
+    .icon :hover{
+        cursor: pointer;
+    }
     .overview-text{
         text-align: justify;
     }
