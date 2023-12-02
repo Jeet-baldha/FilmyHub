@@ -22,6 +22,7 @@ const url = "https://api.themoviedb.org/3/";
 const BearerToken = "eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIwNzAzMmU2YjA4NDMzNmRlMWQ1MTVhMmJhMTEyYmFkOCIsInN1YiI6IjY0ZDNlNDcwZGQ5MjZhMDFlOTg3YmQ1NSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.nf3OISp0W87cprwZXdkN-4hgY0-dHR7k4w6o_TokVbI";
 const config = {
     headers: { Authorization: 'Bearer ' + BearerToken },
+    timeout:5000
 }
 
 
@@ -39,7 +40,7 @@ app.use(flash());
 app.use(passport.initialize());
 app.use(passport.session()); 
 
-mongoose.connect("mongodb://localhost:27017/filmyHubDB");
+mongoose.connect(process.env.MONGODB_URL);
 
 passport.use(User.createStrategy());
 passport.serializeUser((User, done)=> {done(null, User); });
@@ -79,42 +80,41 @@ app.get('/', async (req, res) => {
      isAuth  = req.isAuthenticated();
      username = "";
     if(isAuth){
-      console.log(req.user);
       username = req.user.username;
     }
     try {
         let trendingMovieListDay = await axios.get(url + "trending/movie/day", config);
         let trendingMovieListWeek = await axios.get(url + "trending/movie/week", config);
         let popularMovieList = await axios.get(url + "movie/popular", config);
-        // let resplonse = await axios.get('https://api.themoviedb.org/3/discover/movie?release_date.desc', config);
-        // let latestMovieList =[];
+        let resplonse = await axios.get('https://api.themoviedb.org/3/discover/movie?release_date.desc', config);
+        let latestMovieList =[];
 
-        // for(let i = 0;i<20;i++){
-        //     let movie = resplonse.data.results[i];
-        //     movie = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/videos?language=en-US`,config);
-        //     movie = movie.data.results;
-        //     if(movie.length > 0){
+        for(let i = 0;i<20;i++){
+            let movie = resplonse.data.results[i];
+            movie = await axios.get(`https://api.themoviedb.org/3/movie/${movie.id}/videos?language=en-US`,config);
+            movie = movie.data.results;
+            if(movie.length > 0){
                 
-        //         for(let j = 0;j < movie.length;j++) {
-        //             if(movie[j].type === 'Trailer'){
-        //                 latestMovieList.push(movie[j]); break
-        //             }
-        //         };
+                for(let j = 0;j < movie.length;j++) {
+                    if(movie[j].type === 'Trailer'){
+                        latestMovieList.push(movie[j]); break
+                    }
+                };
 
-        //     }
-        // }
+            }
+        }
 
         res.render('index', {
             trendingMovieListDay: trendingMovieListDay.data,
             trendingMovieListWeek: trendingMovieListWeek.data,
             popularMovieList: popularMovieList.data,
             isAuthenticated:isAuth,
-            username:username
-            // latestMovieList:latestMovieList  
+            username:username,
+            latestMovieList:latestMovieList  
         });
     } catch (error) {
         console.log(error);
-        res.status(404).send(error.message);
+        res.status(404).send(error.message + " please try again");
     }
 
 
@@ -137,20 +137,6 @@ app.get('/movie', async (req, res) => {
 });
 
 
-app.get('/tv-show', async (req, res) => {
-   try {
-     let popularMovieList = await axios.get(url + "tv/popular?page=1", config);
-     res.render("tv-showList", {
-         movieList: popularMovieList.data,
-         btn: true,
-         isAuthenticated:isAuth,
-         username:username
-     })
-   } catch (error) {
-    console.log(error.message);
-    res.status(404).send(error.message);
-   }
-});
 
 app.get('/search', async (req, res) => {
 
@@ -215,7 +201,7 @@ app.post('/movie/add', async (req, res) => {
       }
     } catch (error) {
       console.error('Error updating watchList:', error);
-      res.status(500).json({ error: 'Internal Server Error' });
+      res.status(500).json({ error: 'Internal Server Error Please refresh the site' });
     }
   } else {
     res.status(401).json({ error: 'Unauthorized' });
@@ -261,8 +247,7 @@ app.get('/watchlist', async (req, res) => {
         });
       }
     } else {
-      res.status(401).json({ error: 'Unauthorized' });
-     
+      res.send('<script>alert("Unauthorized. Please log in."); window.location.href="/login";</script>');
     }
   } catch (error) {
     console.error('Error fetching watchlist:', error);

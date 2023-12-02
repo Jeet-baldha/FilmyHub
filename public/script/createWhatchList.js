@@ -1,7 +1,7 @@
 
 async function addMovie(id){
 
-    console.log(parseInt(id));
+
     let response = await fetch('/movie/add', {
         method: 'POST',
         headers: {

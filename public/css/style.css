@@ -149,7 +149,7 @@
     }
 
     .media-discover{
-        background: url(../assest/image/media-discover-poster.png);
+        background: url("../assest/image/media-discover-poster.png");
         background-size: cover;
         background-repeat: no-repeat;
         color: #E4F9F5;
@@ -314,7 +314,7 @@
 
     .latest-trailer{
 
-        background: url("assest/image/trailer-bakground.png");
+        background: url("../assest/image/trailer-bakground.png");
         padding:40px 0;
         background-size: cover;
         background-repeat: no-repeat;

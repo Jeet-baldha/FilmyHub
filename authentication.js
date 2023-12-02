@@ -45,7 +45,6 @@ passport.use(new FacebookStrategy({
     },
     async function(accessToken, refreshToken, profile, cb) {
      try {
-      console.log(profile);
       let nuser = await User.findOne({facebookId:profile.id});
      
       if(!nuser){
@@ -87,7 +86,7 @@ passport.use(new GoogleStrategy({
     
       return cb(null, user);
     } catch (error) {
-      returncb(error, null);
+      return cb(error, null);
     }
   }
   ));
