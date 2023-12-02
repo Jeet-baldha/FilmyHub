@@ -40,7 +40,7 @@ passport.use(new LocalStrategy((usernameOrEmail, password, done) => {
 passport.use(new FacebookStrategy({
     clientID:process.env.FACEBOOK_APP_ID,
     clientSecret: process.env.FACEBOOK_APP_SECRET,
-    callbackURL: "http://filmyhub-6i1t.onrender.com/auth/facebook/user",
+    callbackURL: "https://filmyhub-6i1t.onrender.com/auth/facebook/user",
     profileFields: ['id', 'displayName', 'photos', 'email']
     },
     async function(accessToken, refreshToken, profile, cb) {
@@ -66,7 +66,7 @@ passport.use(new FacebookStrategy({
 passport.use(new GoogleStrategy({
     clientID: process.env.GOOGLE_CLIENT_ID,
     clientSecret: process.env.GOOGLE_CLIENT_SECRET,
-    callbackURL: "http://filmyhub-6i1t.onrender.com/auth/google/user",
+    callbackURL: "https://filmyhub-6i1t.onrender.com/auth/google/user",
     userProfileURL: "https://www.googleapis.com/oauth2/v3/userinfo"
   },
   async function(accessToken, refreshToken, profile, cb) {
