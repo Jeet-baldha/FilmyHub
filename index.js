@@ -14,7 +14,7 @@ import * as auth from './authentication.js'
 import User from './databse.js'
 
 const app = express();
-var port = 3000;
+var port = process.env.PORT || 3000;
 app.use(bodyParser.urlencoded({extended:true}));
 app.use(bodyParser.json());
 
